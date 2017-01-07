@@ -60,9 +60,9 @@ Plugin 'vim-scripts/c.vim'
 ".c->.h
 Plugin 'a.vim'
 "代码自动补全
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'OmniCppComplete'
-Plugin 'AutoComplPop'
+Plugin 'Valloric/YouCompleteMe'
+"Plugin 'OmniCppComplete'
+"Plugin 'AutoComplPop'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 "Plugin 'L9'
@@ -507,15 +507,15 @@ let g:syntastic_enable_highlighting=1
 " highlight SyntasticErrorSign guifg=white guibg=black
 "
 " " to see error location list
- let g:syntastic_always_populate_loc_list = 0
- let g:syntastic_auto_loc_list = 0
+ let g:syntastic_always_populate_loc_list = 1
+ let g:syntastic_auto_loc_list = 1
  let g:syntastic_loc_list_height = 5
  function! ToggleErrors()
      let old_last_winnr = winnr('$')
      lclose
      if old_last_winnr == winnr('$')
      " Nothing was closed, open syntastic error location panel
-        Errors
+     lopen
      endif
  endfunction
 nnoremap <Leader>s :call ToggleErrors()<cr>
@@ -556,61 +556,60 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 "安装：
 " cd ~/.vim/bundle/YouCompleteMe/
 " ./install.py --clang-completer
-"let g:ycm_key_list_select_completion = ['<Down>']
-"let g:ycm_key_list_previous_completion = ['<Up>']
-"let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
-"let g:ycm_min_num_of_chars_for_completion=2 " 从第2个键入字符就开始罗列匹配项
-"let g:ycm_cache_omnifunc=0  " 禁止缓存匹配项,每次都重新生成匹配项
-"let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
-" 在注释输入中也能补全
-" let g:ycm_complete_in_comments = 1
-" " 在字符串输入中也能补全
-" let g:ycm_complete_in_strings = 1
-" "注释和字符串中的文字也会被收入补全
-" let g:ycm_collect_identifiers_from_comments_and_strings = 0
-" let g:ycm_global_ycm_extra_conf =
-" '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-"
-" nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-" nnoremap <leader>lo :lopen<CR> "open locationlist                                                                                                                      
-" nnoremap <leader>lc :lclose<CR>   "close locationlist
-" inoremap <leader><leader> <C-x><C-o>"
-" inoremap <leader><leader> <C-x><C-o>
-" nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
+let g:ycm_min_num_of_chars_for_completion=2 " 从第2个键入字符就开始罗列匹配项
+let g:ycm_cache_omnifunc=0  " 禁止缓存匹配项,每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
+ "在注释输入中也能补全
+ let g:ycm_complete_in_comments = 1
+ " 在字符串输入中也能补全
+ let g:ycm_complete_in_strings = 1
+ "注释和字符串中的文字也会被收入补全
+ let g:ycm_collect_identifiers_from_comments_and_strings = 0
+ let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+ nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+ nnoremap <leader>lo :lopen<CR> "open locationlist                                                                                                                      
+ nnoremap <leader>lc :lclose<CR>   "close locationlist
+ inoremap <leader><leader> <C-x><C-o>"
+ inoremap <leader><leader> <C-x><C-o>
+ nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " """"""""""AutoComplPop&OmniCppComplete
- let OmniCpp_NamespaceSearch = 1
- let OmniCpp_GlobalScopeSearch = 1
- let OmniCpp_ShowAccess = 1
- let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
- let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
- let OmniCpp_MayCompleteArrow = 1 " 输入 -> 后自动补全
- let OmniCpp_MayCompleteScope = 1 " 输入 :: 后自动补全
- let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-"let OmniCpp_SelectFirstItem=2     ”自动弹出时自动跳至第一个
-" 自动关闭补全窗口
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menuone,menu,longest
-   "自动补全命令时候使用菜单式匹配列表  
-   "set wildmenu  
-"Pmenu 所有项配色 PmenSel 选中项配色
-"highlight Pmenu    guibg=darkgrey  guifg=black "term ctermfg ctermbg
-"highlight PmenuSel guibg=lightgrey guifg=black
-"   autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete  
-"   autocmd FileType python set omnifunc=pythoncomplete#Complete  
-"   autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS  
-"   autocmd FileType html set omnifunc=htmlcomplete#CompleteTags  
-"   autocmd FileType css set omnifunc=csscomplete#CompleteCSS  
-"   autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags  
-"   autocmd FileType java set omnifunc=javacomplete#Complet  
+" let OmniCpp_NamespaceSearch = 1
+" let OmniCpp_GlobalScopeSearch = 1
+" let OmniCpp_ShowAccess = 1
+" let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
+" let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
+" let OmniCpp_MayCompleteArrow = 1 " 输入 -> 后自动补全
+" let OmniCpp_MayCompleteScope = 1 " 输入 :: 后自动补全
+" let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+""let OmniCpp_SelectFirstItem=2     ”自动弹出时自动跳至第一个
+"" 自动关闭补全窗口
+"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+"set completeopt=menuone,menu,longest
+"   "自动补全命令时候使用菜单式匹配列表  
+"   "set wildmenu  
+""Pmenu 所有项配色 PmenSel 选中项配色
+""highlight Pmenu    guibg=darkgrey  guifg=black "term ctermfg ctermbg
+""highlight PmenuSel guibg=lightgrey guifg=black
+""   autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete  
+""   autocmd FileType python set omnifunc=pythoncomplete#Complete  
+""   autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS  
+""   autocmd FileType html set omnifunc=htmlcomplete#CompleteTags  
+""   autocmd FileType css set omnifunc=csscomplete#CompleteCSS  
+""   autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags  
+""   autocmd FileType java set omnifunc=javacomplete#Complet  
 """""""""""""""""""vimwiki""""""""""""""""""
-"用于个人知识管理——每日记录才有意义；不要急于分类，等待一个阶段完成
+""用于个人知识管理——每日记录才有意义；不要急于分类，等待一个阶段完成
 "let g:vimwiki_use_mouse = 1
 "let g:vimwiki_list = [{'path': '~/vimwiki/',
 "			\'path_html': '~/vimwiki/html/',
 "			\'html_header': '~/vimwiki/template/header.tpl',}]
-"path- 存放vimwiki文件（.wiki）路径
-"path_html- 从vimwiki转换为网页时的路径
-"html_header- 转换为网页时使用的网页模板的路径
+""path- 存放vimwiki文件（.wiki）路径
+""path_html- 从vimwiki转换为网页时的路径
+""html_header- 转换为网页时使用的网页模板的路径
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mark as loaded
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
