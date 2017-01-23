@@ -36,6 +36,7 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'tpope/vim-fugitive'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
+Plugin 'flazz/vim-colorschemes'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 "Plugin 'Xuyuanp/nerdtree-git-plugin'
@@ -43,8 +44,9 @@ Plugin 'majutsushi/tagbar'
 Plugin 'taglist.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-syntastic/syntastic'
+"Plugin 'w0rp/ale'
 Plugin 'minibufexpl.vim'
-"Plugin 'vimwiki/vimwiki'
+Plugin 'vimwiki'
 "Plugin 'TaskList.vim'
 "Plugin 'Tabular.vim'
 "Plugin 'sessionman.vim'
@@ -158,9 +160,9 @@ set gfw=幼圆:h10:cGB2312
 "set t_Co=256   "256色
 set background=dark "light
 "colorscheme solarized
-colorscheme molokai
-"colorscheme mine1 "配色方案
-"colorscheme desert
+"colorscheme molokai
+colorscheme my_molokai 
+"colorscheme ubaryd
 "Gvim config
 if has("gui_running")
    "colorscheme solarized
@@ -258,7 +260,7 @@ set showbreak=-> "在折行处添加标记
 set tabstop=4 "设置 tab（制表符）宽度为4
 set softtabstop=4 "设置（软）制表符宽度为4
 set shiftwidth=4 "设置缩进的空格数为4
-"set expandtab "空格代替 TAB
+set expandtab "空格代替 TAB
 "设置自动缩进
 if has("autocmd")
   " Enable file type detection.
@@ -307,7 +309,7 @@ let s:PlugWinSize = 30
 "inoremap <leader>q ''<esc>:let leavechar="'"<cr>i
 "inoremap <leader>w ""<esc>:let leavechar='"'<cr>i
 "代码折叠
-autocmd FileType c,cpp  setl fdm=syntax | setl fen "它使用了自动命令，如果发现文件类型为c或cpp，就启用折叠功能，并按语法进行折叠
+"autocmd FileType c,cpp  setl fdm=syntax | setl fen "它使用了自动命令，如果发现文件类型为c或cpp，就启用折叠功能，并按语法进行折叠
 "set foldmethod=syntax " 用语法高亮来定义折叠
 "set foldlevel=100 " 启动vim时不要自动折叠代码
 "set foldcolumn=5 " 设置折叠栏宽度
@@ -488,10 +490,10 @@ nmap <leader>mmbc :CMiniBufExplorer<CR>
 ":bp   打开当前buffer的前一个buffer
 ":b"num"   打开指定
 "的buffer，"num"指的是buffer开始的那个数字，比如上图，我想打开list_audit.erb，输入:b7就ok了
-"""""""""""""syntastic""""""""""""""""""""""""
+""""""""""""""syntastic""""""""""""""""""""""""
 "语法检查
 " configure syntastic syntax checking to check on open as well as save
-let g:syntastic_c_include_dirs = [ '../include', 'ysinclude']
+"let g:syntastic_c_include_dirs = [ '../include', 'ysinclude']
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -503,6 +505,8 @@ let g:syntastic_enable_highlighting=1
 "let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes,速度比pylint快
 "let g:syntastic_javascript_checkers = ['jsl', 'jshint']
 "let g:syntastic_html_checkers=['tidy', 'jshint']
+"let g:syntastic_cpp_checkers=['GCC']
+"let g:syntastic_cpp_gcc_exec="/usr/bin/gcc"
 " 修改高亮的背景色, 适应主题
 " highlight SyntasticErrorSign guifg=white guibg=black
 "
@@ -521,6 +525,30 @@ let g:syntastic_enable_highlighting=1
 nnoremap <Leader>s :call ToggleErrors()<cr>
 " nnoremap <Leader>sn :lnext<cr>
 " nnoremap <Leader>sp :lprevious<cr>
+"""""""""""""ale""""""""""""""""""""""""""""""
+"异步代码检测
+""保持侧边栏可见：
+"let g:ale_sign_column_always = 1
+""改变错误和警告标识符：
+"let g:ale_sign_error = '>>'
+"let g:ale_sign_warning = '--'
+""添加状态栏信息：
+""%{ALEGetStatusLine()}
+"set statusline+=%{ALEGetStatusLine()}
+""改变状态栏信息格式：
+"let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+""改变命令行消息：
+"let g:ale_echo_msg_error_str = 'E'
+"let g:ale_echo_msg_warning_str = 'W'
+"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+""添加检测完成后回调： 
+"augroup YourGroup
+"    autocmd!
+"    autocmd User ALELint call YourFunction()
+"augroup END
+""自定义跳转错误行快捷键：
+"nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+"nmap <silent> <C-j> <Plug>(ale_next_wrap)
 """""""""""""tasklist"""""""""""""""""""""""""
 "任务列表
 "map <leader>td <Plug>TaskList
@@ -551,7 +579,28 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 "nmap <leader>ssl :SessionList<CR>
 "nmap <leader>sss :SessionSave<CR>
 "nmap <leader>ssc :SessionClose<CR>
-""""""""""""youcompleteme""""""""""""""""""""
+""""""""""""自动补全功能及插件“”“”“”“”“""""""""""""""""""""
+" 作为vim补全功能的完善：
+" <C-n> 在所有打开的buffer中查找关键字进行补全
+" <C-x><C-n> 在当前buffer（可能是使用ycm）中查找补全关键字
+" <C-x><C-f> 补全文件名
+" <C-x><C-o> 使用ycm/OmniCppComplete进行全能补全
+" <c-x><c-i>-包含文件关键字
+" <c-x><c-]>-标签文件关键字
+" <c-x><c-k>-字典查找
+" <c-x><c-l>-整行补全 
+" 补全操作：
+" <c-n>-匹配下一个
+" <c-p>-匹配上一个
+" <c-y>-确认使用当前匹配项(之前自己都是想要通过enter键来实现选中，一直没成功,
+" 虽然选中了，当时会换行)
+" <c-e>-退出补全列表
+" <c-h>-从当前匹配中减少一个字符(比如，当前输入是aa，补全列表光标在aabbb上，你
+" 使用<c-h>的话，输入会变成aabb)
+" <c-l>-从当前匹配中增加一个字符(比如，当前输入是aa，补全列表光标在aabbb上，你
+" 使用<c-h>的话，输入会变成aab)
+" {char}-插入字符跟当时光标所在的补全列表项，终止补全
+""""""""""""youcompleteme
 "代码自动补全
 "安装：
 " cd ~/.vim/bundle/YouCompleteMe/
@@ -562,51 +611,56 @@ let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
 let g:ycm_min_num_of_chars_for_completion=2 " 从第2个键入字符就开始罗列匹配项
 let g:ycm_cache_omnifunc=0  " 禁止缓存匹配项,每次都重新生成匹配项
 let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
+let g:ycm_auto_trigger = 0
  "在注释输入中也能补全
  let g:ycm_complete_in_comments = 1
  " 在字符串输入中也能补全
  let g:ycm_complete_in_strings = 1
  "注释和字符串中的文字也会被收入补全
- let g:ycm_collect_identifiers_from_comments_and_strings = 0
+ let g:ycm_collect_identifiers_from_comments_and_strings = 1
  let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-
+ "location_list open 
+ "let g:ycm_always_populate_location_list = 1
+ let g:ycm_warning_symbol = '->'
+ let g:ycm_error_symbol   = '>>' 
+ " 直接触发自动补全 " 修改对C函数的补全快捷键，默认是CTRL + space，修改
+ " 为ALT + ;  
+ let g:ycm_key_invoke_completion = '<M-c>'
  nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
  nnoremap <leader>lo :lopen<CR> "open locationlist                                                                                                                      
  nnoremap <leader>lc :lclose<CR>   "close locationlist
- inoremap <leader><leader> <C-x><C-o>"
- inoremap <leader><leader> <C-x><C-o>
+ "inoremap <leader><leader> <C-x><C-o>"
+ "inoremap <leader><leader> <C-x><C-o>
  nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " """"""""""AutoComplPop&OmniCppComplete
-" let OmniCpp_NamespaceSearch = 1
-" let OmniCpp_GlobalScopeSearch = 1
-" let OmniCpp_ShowAccess = 1
-" let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
-" let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
-" let OmniCpp_MayCompleteArrow = 1 " 输入 -> 后自动补全
-" let OmniCpp_MayCompleteScope = 1 " 输入 :: 后自动补全
-" let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-""let OmniCpp_SelectFirstItem=2     ”自动弹出时自动跳至第一个
-"" 自动关闭补全窗口
-"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-"set completeopt=menuone,menu,longest
-"   "自动补全命令时候使用菜单式匹配列表  
-"   "set wildmenu  
-""Pmenu 所有项配色 PmenSel 选中项配色
-""highlight Pmenu    guibg=darkgrey  guifg=black "term ctermfg ctermbg
-""highlight PmenuSel guibg=lightgrey guifg=black
-""   autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete  
-""   autocmd FileType python set omnifunc=pythoncomplete#Complete  
-""   autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS  
-""   autocmd FileType html set omnifunc=htmlcomplete#CompleteTags  
-""   autocmd FileType css set omnifunc=csscomplete#CompleteCSS  
-""   autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags  
-""   autocmd FileType java set omnifunc=javacomplete#Complet  
+ let OmniCpp_NamespaceSearch = 1
+ let OmniCpp_GlobalScopeSearch = 1
+ let OmniCpp_ShowAccess = 1
+ let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
+ let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
+ let OmniCpp_MayCompleteArrow = 1 " 输入 -> 后自动补全
+ let OmniCpp_MayCompleteScope = 1 " 输入 :: 后自动补全
+ let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+"let OmniCpp_SelectFirstItem=2     ”自动弹出时自动跳至第一个
+" 自动关闭补全窗口
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+set completeopt=menuone,menu,longest
+"Pmenu 所有项配色 PmenSel 选中项配色
+"highlight Pmenu    guibg=darkgrey ctermbg=darkgrey guifg=black ctermfg=black  "term ctermfg ctermbg
+"highlight PmenuSel guibg=lightgrey ctermbg=lightgrey  guifg=black ctermfg=lightgrey 
+"   autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete  
+"   autocmd FileType python set omnifunc=pythoncomplete#Complete  
+"   autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS  
+"   autocmd FileType html set omnifunc=htmlcomplete#CompleteTags  
+"   autocmd FileType css set omnifunc=csscomplete#CompleteCSS  
+"   autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags  
+"   autocmd FileType java set omnifunc=javacomplete#Complet  
 """""""""""""""""""vimwiki""""""""""""""""""
 ""用于个人知识管理——每日记录才有意义；不要急于分类，等待一个阶段完成
-"let g:vimwiki_use_mouse = 1
-"let g:vimwiki_list = [{'path': '~/vimwiki/',
-"			\'path_html': '~/vimwiki/html/',
-"			\'html_header': '~/vimwiki/template/header.tpl',}]
+let g:vimwiki_use_mouse = 1
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+			\'path_html': '~/vimwiki/html/',
+			\'html_header': '~/vimwiki/template/header.tpl',}]
 ""path- 存放vimwiki文件（.wiki）路径
 ""path_html- 从vimwiki转换为网页时的路径
 ""html_header- 转换为网页时使用的网页模板的路径
