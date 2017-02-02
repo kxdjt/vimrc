@@ -47,8 +47,9 @@ Plugin 'vim-syntastic/syntastic'
 "Plugin 'w0rp/ale'
 Plugin 'minibufexpl.vim'
 Plugin 'vimwiki'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 "Plugin 'TaskList.vim'
-"Plugin 'Tabular.vim'
 "Plugin 'sessionman.vim'
 "Plugin 'sjl/gundo.vim'
 "snipmate 代码片段补全 用法待查
@@ -664,6 +665,48 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
 ""path- 存放vimwiki文件（.wiki）路径
 ""path_html- 从vimwiki转换为网页时的路径
 ""html_header- 转换为网页时使用的网页模板的路径
+"""""""""""""""""""markdown""""""""""""""""
+"Plugin 'godlygeek/tabular'
+"Plugin 'plasticboy/vim-markdown'
+":Toc: create a quickfix vertical window navigable table of contents with the
+"headers
+"
+"disable folding
+"let g:vim_markdown_folding_disabled = 1
+"change fold style
+"let g:vim_markdown_folding_style_pythonic = 1
+"let g:vim_markdown_override_foldtext = 0
+"set header folding level
+"let g:vim_markdown_folding_level = 6 "between 1 and 6,default 1
+"Disable Default Key Mappings
+"let g:vim_markdown_no_default_key_mappings = 1
+"Enable TOC window auto-fit
+"let g:vim_markdown_toc_autofit = 1
+"Text emphasis restriction to single-lines
+"let g:vim_markdown_emphasis_multiline = 0
+"Syntax Concealing——vim's config :set conceallevel=2
+"let g:vim_markdown_conceal = 0 "disable 
+"Fenced code block languages
+"let g:vim_markdown_fenced_languages = ['csharp=cs']
+"Syntax extensions
+"LaTeX math 
+"__Used as $x^2$, $$x^2$$, escapable as \$x\$ and \$\$x\$\$.
+"let g:vim_markdown_math = 1
+"YAML Front Matter
+"__Highlight YAML front matter as used by Jekyll or Hugo.
+"let g:vim_markdown_frontmatter = 1
+"TOML Front Matter
+"__Highlight TOML front matter as used by Hugo.
+"__TOML syntax highlight requires vim-toml.
+"let g:vim_markdown_toml_frontmatter = 1
+"JSON Front Matter
+"__Highlight JSON front matter as used by Hugo.
+"__JSON syntax highlight requires vim-json.
+"let g:vim_markdown_json_frontmatter = 1
+"Adjust new list item indent
+"let g:vim_markdown_new_list_item_indent = 2 "default 4
+"Do not require .md extensions for Markdown links
+"let g:vim_markdown_no_extensions_in_markdown = 1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mark as loaded
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -695,4 +738,25 @@ endif
 map <S-s> :w<CR>
 ".asm注释——文件头
 nmap ;= i;<ESC>70a=<ESC>a<ENTER>;<ENTER>;————<ESC>:r !date<CR>i<BS><ESC>o;作用：<ENTER>;数据结构：<ENTER>;技术细节：<ENTER>;程序流程：<ENTER>;<ESC>70a=<ESC>a<ENTER><ESC>-------
+
+"在浏览器预览
+function! ViewInBrowser(name)
+    let file = getline(".")
+    let l:browsers = {
+        \"ff":" firefox",
+    \}
+   " let htdocs='/Users/leon1/'
+   " let strpos = stridx(file, substitute(htdocs, '\\\\', '\', g"))
+    let file = '"'. file . '"'
+    "exec :update " .file
+    "echo file .' ## '. htdocs
+    "if strpos == -1
+    "    exec ":silent !".l:browsers[a:name]." file://".file
+    "else
+    "    let file=substitute(file,htdocs,"http://127.0.0.1:8090/","g")
+     "   let file=substitute(file,'\\','/',"g")
+        exec ":!".l:browsers[a:name] file
+    "endif
+endfunction
+nmap <Leader>ff :call ViewInBrowser("ff")<cr>
 """""""""""""""""配置代码到此为止"""""""""""""""""""""""""""""""""""
